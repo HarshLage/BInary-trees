@@ -86,10 +86,20 @@ class Node {
  void levelorderTraversal(Node * root){
   queue<Node *>q;
   q.push(root);
+  q.push(NULL);
 
   while(!q.empty()){
     Node * front = q.front();
+    
     q.pop();
+    
+    if(front == NULL){
+       cout<<endl;
+       if(!q.empty()){
+       q.push(NULL);
+       }
+    }
+    else {
 
     cout<<front->data<<" ";
 
@@ -99,6 +109,7 @@ class Node {
     if(front->right!=NULL){
       q.push(front->right);
 
+    }
     }
   }
 
@@ -119,7 +130,7 @@ int main()
   postorder(root);
   cout<<endl;
   
-  cout<<"printing levelordertraversal :" ;
+  cout<<"printing levelordertraversal :"<<endl ;
   levelorderTraversal(root);
   cout<<endl;
   return 0; 
