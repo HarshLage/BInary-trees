@@ -1,0 +1,126 @@
+#include<bits/stdc++.h>
+using namespace std;
+class Node {
+  public:
+  int data;
+  Node * left;
+  Node * right;
+  Node(int val){
+    this -> data = val;
+    this -> left = NULL;
+    this -> right = NULL;
+  }
+};
+ Node * tree(){
+  cout<<"enter the Node :"<<endl;
+  int data;
+  cin>>data;
+
+  if(data == -1){
+    return NULL;
+  }
+  //right implementation
+  Node * root = new Node(data);
+  // cout<<"for left Node :"<< root -> data <<endl;
+  root -> left = tree();
+   
+  //left implementation 
+  // cout<<"for right subtree :" << root -> data << endl;
+  root -> right = tree();
+  return root; 
+
+ }
+ void preorder(Node * root){
+  if(root == NULL){
+    return;
+  }
+
+  //n
+  cout<<root->data<<" ";
+  //l
+  preorder(root -> left);
+
+  //r
+
+  preorder(root -> right);
+  
+ }
+
+  void inorder(Node * root){
+  if(root == NULL){
+    return;
+  }
+
+  //l
+  inorder(root -> left);
+  //n
+ 
+  cout<<root->data<<" ";
+
+  //r
+
+  inorder(root -> right);
+  
+ }
+
+  void postorder(Node * root){
+  if(root == NULL){
+    return;
+  }
+
+  //l
+  postorder(root->left);
+ 
+  
+
+  //r
+  postorder(root -> right);
+
+  //n
+  cout<<root->data<<" ";
+
+  
+  
+ }
+
+ void levelorderTraversal(Node * root){
+  queue<Node *>q;
+  q.push(root);
+
+  while(!q.empty()){
+    Node * front = q.front();
+    q.pop();
+
+    cout<<front->data<<" ";
+
+    if(front->left!=NULL){
+       q.push(front->left);
+    }
+    if(front->right!=NULL){
+      q.push(front->right);
+
+    }
+  }
+
+ }
+
+int main()
+{
+  Node * root = tree();
+  cout<<"printing preorder :" ;
+  preorder(root);
+  cout<<endl;
+
+  cout<<"printing inorder :" ;
+  inorder(root);
+  cout<<endl;
+
+  cout<<"printing postorder :" ;
+  postorder(root);
+  cout<<endl;
+  
+  cout<<"printing levelordertraversal :" ;
+  levelorderTraversal(root);
+  cout<<endl;
+  return 0; 
+}
