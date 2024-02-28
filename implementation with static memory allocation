@@ -1,0 +1,42 @@
+#include<bits/stdc++.h>
+using namespace std;
+class Node{
+    public:
+    int data;
+    Node * left;
+    Node * right;
+    Node(int val){
+        this->data = val;
+        this->left = NULL;
+        this->right = NULL;
+    }
+
+};
+Node  tree(){
+
+    cout<<"enter a Node "<<endl;
+    int data;
+    cin>>data;
+
+    if(data == -1){
+        return Node(-1);
+    }
+
+    Node root(data);
+    
+    cout<<"for left Node data " << root.data << endl ;
+    Node  left = tree();
+
+    cout<<"for right Node data "<<root.data << endl;
+    Node  right = tree();
+
+    root.left = left.data==-1 ? NULL : &left;
+    root.right = left.data == -1 ? NULL : &right;
+    return root;
+}
+int main()
+{ 
+  Node  root = tree();
+
+  return 0; 
+}
