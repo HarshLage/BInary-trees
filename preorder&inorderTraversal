@@ -1,0 +1,160 @@
+#include<bits/stdc++.h>
+using namespace std;
+class Node {
+  public:
+  int data;
+  Node * left;
+  Node * right;
+  Node(int val){
+    this -> data = val;
+    this -> left = NULL;
+    this -> right = NULL;
+  }
+};
+ Node * tree(){
+  cout<<"enter the Node :"<<endl;
+  int data;
+  cin>>data;
+
+  if(data == -1){
+    return NULL;
+  }
+  //right implementation
+  Node * root = new Node(data);
+  // cout<<"for left Node :"<< root -> data <<endl;
+  root -> left = tree();
+   
+  //left implementation 
+  // cout<<"for right subtree :" << root -> data << endl;
+  root -> right = tree();
+  return root; 
+
+ }
+ void preorder(Node * root){
+  if(root == NULL){
+    return;
+  }
+
+  //n
+  cout<<root->data<<" ";
+  //l
+  preorder(root -> left);
+
+  //r
+
+  preorder(root -> right);
+  
+ }
+
+  void inorder(Node * root){
+  if(root == NULL){
+    return;
+  }
+
+  //l
+  inorder(root -> left);
+  //n
+ 
+  cout<<root->data<<" ";
+
+  //r
+
+  inorder(root -> right);
+  
+ }
+
+  void postorder(Node * root){
+  if(root == NULL){
+    return;
+  }
+
+  //l
+  postorder(root->left);
+ 
+  
+
+  //r
+  postorder(root -> right);
+
+  //n
+  cout<<root->data<<" ";
+
+  
+  
+ }
+
+ void levelorderTraversal(Node * root){
+  queue<Node *>q;
+  q.push(root);
+  q.push(NULL);
+
+  while(!q.empty()){
+    Node * front = q.front();
+    
+    q.pop();
+    
+    if(front == NULL){
+       cout<<endl;
+       if(!q.empty()){
+       q.push(NULL);
+       }
+    }
+    else {
+
+    cout<<front->data<<" ";
+
+    if(front->left!=NULL){
+       q.push(front->left);
+    }
+    if(front->right!=NULL){
+      q.push(front->right);
+
+    }
+    }
+  }
+
+ }
+ int searchinInorder(int inOrder[] , int size , int target){
+  for(int i=0;i<size;i++){
+    if(inOrder[i] == target){
+      return i;
+    }
+  }
+  return -1;
+ }
+ Node * constructTreePreorderAndInorderTraversal(int preOrder[] , int inOrder[] , int &preindex , int inorderStr , int inOrderend , int size ){
+  if(preindex >= size || inorderStr > inOrderend){
+    return NULL;
+  }
+
+  int element = preOrder[preindex];
+  preindex++;
+
+  Node * root = new Node(element);
+  int position = searchinInorder(inOrder , size , element);
+
+  root -> left = constructTreePreorderAndInorderTraversal( preOrder , inOrder , preindex ,  inorderStr , position - 1  , size );
+
+  // Update inOrderend for the right subtree
+  root -> right = constructTreePreorderAndInorderTraversal( preOrder , inOrder , preindex ,  position + 1 , inOrderend   , size );
+
+  return root;
+ }
+
+int main()
+{
+  int preOrder[] = {2,8,10,6,4,12};
+  int inOrder[] = {10,8,6,2,4,12};
+
+  int preindex = 0;
+  int inorderStr = 0;
+  int inOrderend = 0;
+
+  int size = 6;
+
+  Node * root = constructTreePreorderAndInorderTraversal( preOrder , inOrder , preindex ,  inorderStr , inOrderend  , size );
+
+  levelorderTraversal(root);
+
+  return 0; 
+}
