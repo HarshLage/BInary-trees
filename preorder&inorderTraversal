@@ -122,7 +122,14 @@ class Node {
   }
   return -1;
  }
- Node * constructTreePreorderAndInorderTraversal(int preOrder[] , int inOrder[] , int &preindex , int inorderStr , int inOrderend , int size ){
+ void create_mapping(int inOrRder[] , int size , map<int,int>&mapElement_index){
+  for(int i=0;i<size;i++){
+    int element = inOrRder[i];
+    int index = i;
+    mapElement_index[element] = index;
+  }
+ }
+ Node * constructTreePreorderAndInorderTraversal( map<int,int>&mapElement_index , int preOrder[] , int inOrder[] , int &preindex , int inorderStr , int inOrderend , int size ){
   if(preindex >= size || inorderStr > inOrderend){
     return NULL;
   }
@@ -131,12 +138,13 @@ class Node {
   preindex++;
 
   Node * root = new Node(element);
-  int position = searchinInorder(inOrder , size , element);
+  // int position = searchinInorder(inOrder , size , element);
+  int position = mapElement_index[element];
+ // Update inOrderend for the left subtree
+  root->left = constructTreePreorderAndInorderTraversal(mapElement_index , preOrder, inOrder, preindex, inorderStr, position - 1, size);
 
-  root -> left = constructTreePreorderAndInorderTraversal( preOrder , inOrder , preindex ,  inorderStr , position - 1  , size );
-
-  // Update inOrderend for the right subtree
-  root -> right = constructTreePreorderAndInorderTraversal( preOrder , inOrder , preindex ,  position + 1 , inOrderend   , size );
+  // Update inorderStr for the right subtree
+  root->right = constructTreePreorderAndInorderTraversal(mapElement_index,preOrder, inOrder, preindex , position + 1 , inOrderend , size);
 
   return root;
  }
@@ -148,11 +156,13 @@ int main()
 
   int preindex = 0;
   int inorderStr = 0;
-  int inOrderend = 0;
+  int inOrderend = 5;
 
   int size = 6;
+  map<int,int>mapElement_index;
+  create_mapping(inOrder , size , mapElement_index);
 
-  Node * root = constructTreePreorderAndInorderTraversal( preOrder , inOrder , preindex ,  inorderStr , inOrderend  , size );
+  Node * root = constructTreePreorderAndInorderTraversal( mapElement_index , preOrder , inOrder , preindex ,  inorderStr , inOrderend  , size );
 
   levelorderTraversal(root);
 
