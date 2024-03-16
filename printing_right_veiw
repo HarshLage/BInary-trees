@@ -1,0 +1,130 @@
+#include<bits/stdc++.h>
+using namespace std;
+class Node {
+    public:
+    int data;
+    Node * left;
+    Node * right;
+
+    Node(int val){
+        this->data = val;
+        this->left = NULL;
+        this->right = NULL;
+    }
+};
+//10 20 40 -1 -1 50 70 110 -1 -1 111 -1 -1 80 -1 -1 30 -1 60 -1 90 112 -1 -1 113 -1 -1 
+Node * tree(){
+    cout<<"enter the element :"<<endl;
+    int element;
+    cin>>element;
+
+    if(element == -1 ){
+        return NULL;
+    }
+
+    Node * root = new Node(element);
+
+    root -> left = tree();
+    root->right = tree();
+
+    return root;
+}
+
+void preorder(Node * root){
+   if(root == NULL){
+    return;
+   }
+
+   cout<<root->data<<" ";
+
+   preorder(root->left);
+   preorder(root->right);
+}
+
+void postorder(Node * root){
+   if(root == NULL){
+    return;
+   }
+
+
+   postorder(root->left);
+
+
+   postorder(root->right);
+
+   cout<<root->data<<" ";
+}
+
+void levelorder(Node * root){
+    queue<Node*>q;
+    q.push(root);
+    q.push(NULL);
+
+    while(!q.empty()){
+        Node * temp = q.front();
+        q.pop();
+
+        if(temp==NULL){
+            cout<<endl;
+            if(!q.empty()){
+            q.push(NULL);
+            }
+        }
+        else{
+            cout<<temp->data<<" ";
+            if(temp->left!=NULL){
+                q.push(temp->left);
+            }
+            if(temp->right!=NULL){
+                q.push(temp->right);
+            }
+        }
+    }
+}
+void inorder(Node * root){
+   if(root == NULL){
+    return;
+   }
+
+
+   inorder(root->left);
+  cout<<root->data<<" ";
+
+   inorder(root->right);
+}
+void printleftView(Node * root , vector<int>&leftview , int level){
+    if(root==NULL){
+        return;
+    }
+    if(level==leftview.size()){
+        leftview.push_back(root->data);
+
+    }
+    printleftView(root->left,leftview,level+1);
+    printleftView(root->right,leftview,level+1);
+}
+void printrightView(Node * root , vector<int>&rightview , int level){
+    if(root==NULL){
+        return;
+    }
+    if(level==rightview.size()){
+        rightview.push_back(root->data);
+
+    }
+    printrightView(root->right,rightview,level+1);
+    printrightView(root->left,rightview,level+1);
+
+}
+int main()
+{
+  Node * root = tree();
+  levelorder(root);
+
+  cout<<"printing rightView"<<endl;
+  vector<int>rightView;
+  printrightView(root,rightView,0);
+  for(int i=0;i<rightView.size();i++){
+    cout<<rightView[i]<<" ";
+  }cout<<endl;
+  return 0; 
+}
