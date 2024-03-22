@@ -1,0 +1,69 @@
+class Solution {
+  public:
+    Node * makeChildToparentMapAndFindTarget(unordered_map<Node*,Node*>&parentMap , Node * root , int target){
+        Node * targetNode = 0;
+        queue<Node *>q;
+        parentMap[root] = 0;
+        q.push(root);
+        
+        while(!q.empty()){
+            Node * front = q.front(); q.pop();
+            
+            if(front->data == target){
+                targetNode = front;
+            }
+            if(front->left!=NULL){
+                q.push(front->left);
+                parentMap[front->left] = front;
+            }
+            if(front->right!=NULL){
+                q.push(front->right);
+                parentMap[front->right] = front;
+            }
+        }
+        return targetNode;
+        
+
+        
+    }
+    int BurnThetree(Node * targetNode ,  unordered_map<Node*,Node*>&parentMap){
+        unordered_map<Node * , bool>visited;
+        queue<Node*>q;
+        int t = 0;
+        q.push(targetNode);
+        visited[targetNode] = 1;
+        while(!q.empty()){
+            int size = q.size();
+            bool isSpreaded = 0;
+            for(int i=0;i<size;i++){
+                Node * front = q.front();
+                q.pop();
+                if(front->left && !visited[front->left] ){
+                    q.push(front->left) ;
+                    visited[front->left] = 1;
+                    isSpreaded = 1;
+                }
+                if(front->right && !visited[front->right] ){
+                    q.push(front->right) ;
+                    visited[front->right] = 1;
+                    isSpreaded = 1;
+                }
+                if(parentMap[front] && !visited[parentMap[front]]){
+                    q.push(parentMap[front]);
+                    visited[parentMap[front]] = 1;
+                    isSpreaded = 1;
+                }
+            }
+            if(isSpreaded) t++;
+        }
+        return t;
+        
+   
+    }
+    int minTime(Node* root, int target) 
+    {
+        unordered_map<Node*,Node*>parentMap;
+        Node * targetNode = makeChildToparentMapAndFindTarget(parentMap,root,target);
+        return BurnThetree(targetNode , parentMap);
+    }
+};
